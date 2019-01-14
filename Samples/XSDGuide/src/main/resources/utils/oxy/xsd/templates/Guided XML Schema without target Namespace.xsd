@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:d2t="http://www.data2type.de"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified"
+    vc:minVersion="1.0" vc:maxVersion="1.1">
+    
+    <xs:annotation>
+        <xs:appinfo>
+            <d2t:xsdguide status="active" mode="${ask('Please select the XSD styleguide rule set', combobox, ('salami-slice':'Salami Slice';'venetian-blind':'Venetian Blind'), 'venetian-blind')}" namespace="false"/>
+        </xs:appinfo>
+    </xs:annotation>
+</xs:schema>
