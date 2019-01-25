@@ -123,65 +123,6 @@
             </sqf:fix>
         </sch:rule>
 
-        <sch:rule context="xs:complexType/xs:sequence/xs:* | xs:complexType/xs:choice/xs:*" role="info">
-            <sch:let name="complexType" value="../.."/>
-            <sch:report test="$complexType/xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-content" sqf:fix="vb.content.dtd.after vb.content.dtd.before vb.content.dtd.insert.first vb.content.dtd.insert.last vb.content.no">Do you want to add some children after/before this <sch:name/>?</sch:report>
-            <sqf:fix id="vb.content.dtd.after">
-                <sqf:description>
-                    <sqf:title>Insert content after this <sch:name/></sqf:title>
-                </sqf:description>
-                <sqf:user-entry name="vb.content.dtd.spec">
-                    <sqf:description>
-                        <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
-                    </sqf:description>
-                </sqf:user-entry>
-                <sqf:add position="after" select="d2t:createContentByDTD($vb.content.dtd.spec, false())"/>
-                <sqf:add match="$complexType" node-type="attribute" target="mixed" select="contains($vb.content.dtd.spec, '#PCDATA') or $complexType/@mixed = 'true'"/>
-            </sqf:fix>
-            <sqf:fix id="vb.content.dtd.before">
-                <sqf:description>
-                    <sqf:title>Insert content before this <sch:name/></sqf:title>
-                </sqf:description>
-                <sqf:user-entry name="vb.content.dtd.spec">
-                    <sqf:description>
-                        <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
-                    </sqf:description>
-                </sqf:user-entry>
-                <sqf:add position="before" select="d2t:createContentByDTD($vb.content.dtd.spec, false())"/>
-                <sqf:add match="$complexType" node-type="attribute" target="mixed" select="contains($vb.content.dtd.spec, '#PCDATA') or $complexType/@mixed = 'true'"/>
-            </sqf:fix>
-            <sqf:fix id="vb.content.dtd.insert.first" use-when="self::xs:choice | self::xs:sequence">
-                <sqf:description>
-                    <sqf:title>Insert content into this <sch:name/> (at the beginning).</sqf:title>
-                </sqf:description>
-                <sqf:user-entry name="vb.content.dtd.spec">
-                    <sqf:description>
-                        <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
-                    </sqf:description>
-                </sqf:user-entry>
-                <sqf:add position="first-child" select="d2t:createContentByDTD($vb.content.dtd.spec, false())"/>
-            </sqf:fix>
-            <sqf:fix id="vb.content.dtd.insert.last" use-when="(self::xs:choice | self::xs:sequence)/*">
-                <sqf:description>
-                    <sqf:title>Insert content into this <sch:name/> (at the end).</sqf:title>
-                </sqf:description>
-                <sqf:user-entry name="vb.content.dtd.spec">
-                    <sqf:description>
-                        <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
-                    </sqf:description>
-                </sqf:user-entry>
-                <sqf:add position="last-child" select="d2t:createContentByDTD($vb.content.dtd.spec, false())"/>
-            </sqf:fix>
-            <sqf:fix id="vb.content.no">
-                <sqf:description>
-                    <sqf:title>No more children for this complex type!</sqf:title>
-                </sqf:description>
-                <sqf:delete match="d2t:guide-cleanup($complexType, 'check-content')"/>
-            </sqf:fix>
-        </sch:rule>
-
-
-
     </sch:pattern>
 
     <sch:pattern icon="vb.elementType">
