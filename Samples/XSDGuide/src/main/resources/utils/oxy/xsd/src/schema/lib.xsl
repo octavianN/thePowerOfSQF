@@ -48,17 +48,24 @@
         <xsl:param name="forceWrapper" as="xs:boolean"/>
         <xsl:param name="design-pattern" as="xs:string"/>
         <xsl:variable name="parsed" as="element()*">
-            <xsl:analyze-string select="$dtd.syntax" regex="([()*?+,|])|(\s+)">
+            <xsl:analyze-string select="$dtd.syntax" regex="([()*?+,|])|(\s+)|\{{([^}}]+)\}}">
                 <xsl:matching-substring>
                     <xsl:variable name="char" select="regex-group(1)"/>
-                    <xsl:if test="$char != ''">
-                        <xsl:variable name="name" select="$syntax($char)"/>
-                        <xsl:element name="{$name}">
-                            <xsl:if test="$name = 'm'">
-                                <xsl:attribute name="type" select="$char"/>
-                            </xsl:if>
-                        </xsl:element>
-                    </xsl:if>
+                    <xsl:variable name="spec-m" select="regex-group(3)"/>
+                    <xsl:choose>
+                        <xsl:when test="$char != ''">
+                            <xsl:variable name="name" select="$syntax($char)"/>
+                            <xsl:element name="{$name}">
+                                <xsl:if test="$name = 'm'">
+                                    <xsl:attribute name="type" select="$char"/>
+                                </xsl:if>
+                            </xsl:element>
+                        </xsl:when>
+                        <xsl:when test="$spec-m != ''">
+                            <m type="{$spec-m}"/>
+                        </xsl:when>
+                        <xsl:otherwise/>
+                    </xsl:choose>
                 </xsl:matching-substring>
                 <xsl:non-matching-substring>
                     <xsl:if test=". != '#PCDATA'">
@@ -192,6 +199,20 @@
 
     <xsl:template match="@m[. = '?']" mode="d2t:dtd2xsd">
         <xsl:attribute name="minOccurs" select="0"/>
+    </xsl:template>
+
+    <xsl:template match="@m" mode="d2t:dtd2xsd">
+        <xsl:variable name="tokens" select="tokenize(., ':') ! normalize-space(.)"/>
+        <xsl:if test="not($tokens[1] = ('1', ''))">
+            <xsl:attribute name="minOccurs" select="$tokens[1]"/>
+        </xsl:if>
+        <xsl:if test="not($tokens[2] = '1')">
+            <xsl:attribute name="maxOccurs" select="
+                    if ($tokens[2] = '') then
+                        ('unbounded')
+                    else
+                        ($tokens[2])"/>
+        </xsl:if>
     </xsl:template>
 
 
