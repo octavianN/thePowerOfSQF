@@ -311,4 +311,104 @@
         </xs:element>
     </xsl:function>
 
+    <xsl:function name="d2t:createDTDbyXSD" as="xs:string">
+        <xsl:param name="xsdElement" as="element()?"/>
+        <xsl:sequence select="d2t:createDTDbyXSD($xsdElement, false())"/>
+    </xsl:function>
+
+    <xsl:function name="d2t:createDTDbyXSD" as="xs:string">
+        <xsl:param name="xsdElement" as="element()?"/>
+        <xsl:param name="mixed" as="xs:boolean"/>
+        <xsl:variable name="value">
+            <xsl:apply-templates select="$xsdElement" mode="d2t:xsd2dtd">
+                <xsl:with-param name="mixed" select="$mixed"/>
+            </xsl:apply-templates>
+        </xsl:variable>
+        <xsl:variable name="result" select="string-join($value)"/>
+        <xsl:variable name="result">
+            <xsl:analyze-string select="$result" regex="^\((.*)\)$">
+                <xsl:matching-substring>
+                    <xsl:value-of select="regex-group(1)"/>
+                </xsl:matching-substring>
+                <xsl:non-matching-substring>
+                    <xsl:value-of select="."/>
+                </xsl:non-matching-substring>
+            </xsl:analyze-string>
+        </xsl:variable>
+        <xsl:value-of select="$result"/>
+    </xsl:function>
+    <xsl:function name="d2t:createDTDMultiplier" as="xs:string">
+        <xsl:param name="xsdElement" as="element()"/>
+        <xsl:variable name="min" select="($xsdElement/@minOccurs, '1')[1]"/>
+        <xsl:variable name="max" select="($xsdElement/@maxOccurs, '1')[1]"/>
+        <xsl:choose>
+            <xsl:when test="$min = ('0', '1') and $max = ('1', 'unbounded')">
+                <xsl:sequence select="
+                        if ($min = '1' and $max = '1') then
+                            ('')
+                        else
+                            if ($min = '0' and $max = '1') then
+                                ('?')
+                            else
+                                if ($min = '0' and $max = 'unbounded') then
+                                    ('*')
+                                else
+                                    if ($min = '1' and $max = 'unbounded') then
+                                        ('+')
+                                    else
+                                        ('')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="max" select="
+                        if ($max = 'unbounded') then
+                            ('')
+                        else
+                            ($max)"/>
+                <xsl:sequence select="concat('{', $min, ':', $max, '}')"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+
+    <xsl:template match="xs:sequence | xs:choice" mode="d2t:xsd2dtd">
+        <xsl:param name="mixed" select="false()"/>
+        <xsl:variable name="content" as="element()*">
+            <xsl:if test="$mixed">
+                <xs:text/>
+            </xsl:if>
+            <xsl:copy-of select="*"/>
+        </xsl:variable>
+
+        <xsl:variable name="content" as="xs:string*">
+            <xsl:apply-templates select="$content" mode="d2t:xsd2dtd"/>
+        </xsl:variable>
+        <xsl:variable name="sep" select="
+                if (self::xs:sequence) then
+                    (', ')
+                else
+                    (' | ')"/>
+        <xsl:variable name="mulitplier" select="d2t:createDTDMultiplier(.)"/>
+
+        <xsl:variable name="withBrackets" select="$mulitplier != '' or self::xs:sequence or $mixed"/>
+        <xsl:variable name="result">
+            <xsl:if test="$withBrackets">
+                <xsl:text>(</xsl:text>
+            </xsl:if>
+            <xsl:value-of select="string-join($content, $sep)"/>
+            <xsl:if test="$withBrackets">
+                <xsl:text expand-text="yes">){$mulitplier}</xsl:text>
+            </xsl:if>
+        </xsl:variable>
+        <xsl:value-of select="$result" separator=""/>
+    </xsl:template>
+
+    <xsl:template match="xs:text" mode="d2t:xsd2dtd">
+        <xsl:text>#PCDATA</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="xs:element" mode="d2t:xsd2dtd">
+        <xsl:value-of select="@name || d2t:createDTDMultiplier(.)"/>
+    </xsl:template>
+
+    <xsl:template match="node()" mode="d2t:xsd2dtd"> </xsl:template>
+
 </xsl:stylesheet>
