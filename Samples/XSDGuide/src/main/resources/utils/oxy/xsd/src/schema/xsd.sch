@@ -128,6 +128,25 @@
     <sch:pattern icon="vb.elementType">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($design-pattern = 'venetian-blind')]"/>
+        <sch:rule context="xs:complexType">
+            <sch:let name="name" value="@name"/>
+            <sch:let name="declWoType" value=".//xs:element[@name][not(xs:complexType)][not(@type)]"/>
+            <sch:report test="$declWoType" sqf:fix="vb.elementType.allComplex">There are elements in the type <sch:value-of select="$name"/> without a type.</sch:report>
+            
+            <sqf:fix id="vb.elementType.allComplex">
+                <sqf:description>
+                    <sqf:title>Create for all a new complex type.</sqf:title>
+                </sqf:description>
+                <sqf:add position="after">
+                    <xsl:for-each-group select="$declWoType" group-by="@name">
+                        <sqf:copy-of select="d2t:defComplexType(current-grouping-key(), '')"/>
+                    </xsl:for-each-group>
+                </sqf:add>
+                <sqf:add match="$declWoType" node-type="attribute" target="type">
+                    <sch:value-of select="concat(@name, 'Type', '')"/>
+                </sqf:add>
+            </sqf:fix>
+        </sch:rule>
         <sch:rule context="xs:element[@name][not(xs:complexType)]" role="info">
             <sch:let name="name" value="@name"/>
             <sch:assert test="@type" sqf:fix="vb.elementType.complexNew vb.elementType.complexReuse vb.elementType.simpleType vb.elementType.xsdtype">Please specify the type of the element <sch:value-of select="$name"/>.</sch:assert>
