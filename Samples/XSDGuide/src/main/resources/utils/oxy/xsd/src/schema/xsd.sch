@@ -125,7 +125,8 @@
         </sch:rule>
 
     </sch:pattern>
-
+    
+    
     <sch:pattern icon="vb.elementType">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($design-pattern = 'venetian-blind')]"/>
@@ -379,11 +380,11 @@
 
         </sch:rule>
     </sch:pattern>
-    
-<!--    
+
+    <!--    
     Salami Slice
     -->
-    
+
     <sch:pattern id="sl.content">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($isSalamiSlice)]"/>
@@ -408,7 +409,7 @@
                 <sqf:delete match="d2t:guide-cleanup(., 'check-content')"/>
             </sqf:fix>
         </sch:rule>
-        
+
         <sch:rule context="xs:element/xs:complexType/xs:sequence/xs:* | xs:complexType/xs:choice/xs:*" role="info">
             <sch:let name="complexType" value="../.."/>
             <sch:report test="$complexType/xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-content" sqf:fix="sl.content.dtd.after sl.content.dtd.before sl.content.dtd.insert.first sl.content.dtd.insert.last sl.content.no">Do you want to add some children after/before this <sch:name/>?</sch:report>
@@ -465,11 +466,11 @@
                 <sqf:delete match="d2t:guide-cleanup($complexType, 'check-content')"/>
             </sqf:fix>
         </sch:rule>
-        
-        
-        
+
+
+
     </sch:pattern>
-    
+
     <sch:pattern icon="sl.elementType">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($isSalamiSlice)]"/>
@@ -517,14 +518,14 @@
             </sqf:fix>
         </sch:rule>
     </sch:pattern>
-    
+
     <sch:pattern id="sl.attribute">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($isSalamiSlice)]"/>
-        
+
         <sch:rule context="xs:element/xs:complexType" role="info" subject="parent::*">
             <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-attributes" sqf:fix="sl.attribute.add.custom sl.attribute.add.oxy sl.attribute.add.es sl.attribute.no">Do you need some attributes for the element <sch:value-of select="../@name"/>?</sch:report>
-            
+
             <sqf:fix id="sl.attribute.add.custom">
                 <sqf:description>
                     <sqf:title>Add attribute with custom type</sqf:title>
