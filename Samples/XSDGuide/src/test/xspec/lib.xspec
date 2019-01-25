@@ -362,6 +362,270 @@
         </x:scenario>
     </x:scenario>
 
+    <x:scenario label="Scenario for testing function createDTDbyXSD">
+        <x:call function="d2t:createDTDbyXSD"/>
+        <x:scenario label="createDTDbyXSD - empty sequence">
+            <x:call>
+                <x:param name="xsdObject" select="()"/>
+            </x:call>
+            <x:expect label="result" select="''"/>
+            
+        </x:scenario>
+        
+        <x:scenario label="createDTDbyXSD - trivial 1">
+            <x:call>
+                <x:param name="xsdObject" select="/*">
+                    <xs:sequence>
+                        <xs:element name="element"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element'"/>
+
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - trivial 2">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="element"/>
+                        <xs:element name="element2"/>
+                        <xs:element name="element3"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element, element2, element3'"/>
+        </x:scenario>
+
+
+        <x:scenario label="createDTDbyXSD - nested sequence">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="element"/>
+                        <xs:sequence>
+                            <xs:element name="element2"/>
+                            <xs:element name="element3"/>
+                        </xs:sequence>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element, (element2, element3)'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - multiple nesting sequences">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="a"/>
+                        <xs:sequence>
+                            <xs:sequence>
+                                <xs:element name="b"/>
+                                <xs:element name="c"/>
+                            </xs:sequence>
+                            <xs:sequence>
+                                <xs:element name="d"/>
+                                <xs:element name="e"/>
+                            </xs:sequence>
+                            <xs:element name="f"/>
+                        </xs:sequence>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'a, ((b, c), (d, e), f)'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - with multiplier">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="element" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element*'"/>
+        </x:scenario>
+
+
+        <x:scenario label="createDTDbyXSD - with all multipliers">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="element" minOccurs="0"/>
+                        <xs:element name="element2" maxOccurs="unbounded"/>
+                        <xs:element name="element3" minOccurs="0" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element?, element2+, element3*'"/>
+        </x:scenario>
+
+
+        <x:scenario label="createDTDbyXSD - multipliers and sequence">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="element"/>
+                        <xs:sequence maxOccurs="unbounded">
+                            <xs:element name="element2"/>
+                            <xs:element name="element3"/>
+                        </xs:sequence>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element, (element2, element3)+'"/>
+        </x:scenario>
+
+        <x:scenario label="createContentByDTD - with spec multiplier">
+            <x:call>
+                <x:param name="dtd.syntax">
+                    <xs:sequence>
+                        <xs:element name="element" minOccurs="2" maxOccurs="8"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element{2:8}'"/>
+        </x:scenario>
+        
+        <x:scenario label="createContentByDTD - with spec multiplier, max unbounded">
+            <x:call>
+                <x:param name="dtd.syntax">
+                    <xs:sequence>
+                        <xs:element name="element" minOccurs="5" maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'element{5:}'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - trivial choice">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:choice>
+                        <xs:element name="a"/>
+                        <xs:element name="b"/>
+                    </xs:choice>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'a | b'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - sequence and choice">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="a"/>
+                        <xs:choice>
+                            <xs:element name="b"/>
+                            <xs:element name="c"/>
+                        </xs:choice>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'a, b | c'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - choice and sequence">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:choice>
+                        <xs:element name="a"/>
+                        <xs:sequence>
+                            <xs:element name="b"/>
+                            <xs:element name="c"/>
+                        </xs:sequence>
+                    </xs:choice>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'a | (b, c)'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - choice and multiplier">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="a"/>
+                        <xs:element name="b"/>
+                        <xs:element name="c"/>
+                    </xs:choice>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'(a | b | c)*'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - top-level mix of choice and sequence">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="a"/>
+                        <xs:choice>
+                            <xs:element name="b"/>
+                            <xs:element name="c"/>
+                        </xs:choice>
+                        <xs:element name="d"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'a, b | c, d'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - mix of choice and sequence">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="a"/>
+                        <xs:sequence>
+                            <xs:element name="b"/>
+                            <xs:choice>
+                                <xs:element name="c"/>
+                                <xs:element name="d"/>
+                            </xs:choice>
+                            <xs:element name="e"/>
+                        </xs:sequence>
+                        <xs:element name="f"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'a, (b, c | d, e), f'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - complex mix of choice and sequence">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:sequence>
+                        <xs:element name="a"/>
+                        <xs:sequence>
+                            <xs:element name="b"/>
+                            <xs:choice>
+                                <xs:element name="c"/>
+                                <xs:sequence>
+                                    <xs:element name="d"/>
+                                    <xs:element name="e"/>
+                                </xs:sequence>
+                            </xs:choice>
+                        </xs:sequence>
+                        <xs:element name="f"/>
+                    </xs:sequence>
+                </x:param>
+            </x:call>
+            <x:expect label="result" select="'a, (b, c | (d, e)), f'"/>
+        </x:scenario>
+
+        <x:scenario label="createDTDbyXSD - mixed content">
+            <x:call>
+                <x:param name="xsdObject">
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="a"/>
+                        <xs:element name="b"/>
+                    </xs:choice>
+                </x:param>
+                <x:param name="mixed" select="true()"/>
+            </x:call>
+            <x:expect label="result" select="'(#PCDATA | a | b)*'"/>
+        </x:scenario>
+
+    </x:scenario>
+
     <x:scenario label="Scenario for testing function guide-cleanup" pending="Not yet implemented">
         <x:call function="d2t:guide-cleanup">
             <x:param name="context" select="''"/>
