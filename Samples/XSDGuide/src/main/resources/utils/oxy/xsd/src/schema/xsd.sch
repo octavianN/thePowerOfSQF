@@ -586,9 +586,80 @@
                 <sqf:delete match="d2t:guide-cleanup(., 'check-attributes')"/>
             </sqf:fix>
         </sch:rule>
-        
+
     </sch:pattern>
-    
+
+
+    <sch:pattern id="sl.check">
+        <sch:rule context="node()[not($design-pattern = 'salami-slice')]"/>
+        <sch:rule context="xs:element//xs:element">
+            <sch:let name="self" value="."/>
+            <sch:let name="name" value="@name"/>
+            <sch:let name="existEl" value="/xs:schema/xs:element[@name = $name]"/>
+            <sch:report test="@name" sqf:fix="sl.check.refAndCt.conversion sl.check.ref.replace">Do not create local elements. The choosen design pattern states that with ref attributes should refered to global elements.</sch:report>
+
+            <sqf:fix id="sl.check.refAndCt.conversion" use-when="xs:complexType | xs:simpleType and not($existEl)">
+                <sqf:description>
+                    <sqf:title>Convert element declaration to reference</sqf:title>
+                </sqf:description>
+
+                <sqf:add match="ancestor::xs:element" position="after">
+                    <xs:element>
+                        <sqf:copy-of select="$self/@name"/>
+                        <sqf:copy-of select="$self/(xs:complexType | xs:simpleType)"/>
+                    </xs:element>
+                </sqf:add>
+
+                <sqf:replace match="@name" node-type="attribute" target="ref">
+                    <sch:value-of select="."/>
+                </sqf:replace>
+
+                <sqf:delete match="xs:complexType | xs:simpleType"/>
+            </sqf:fix>
+
+            <sqf:fix id="sl.check.ref.replace" use-when="$existEl">
+                <sqf:description>
+                    <sqf:title>Replace this local declaration by a reference to the existing <sch:value-of select="$name"/> element.</sqf:title>
+                </sqf:description>
+                <sqf:replace match="@name" node-type="attribute" target="ref">
+                    <sch:value-of select="."/>
+                </sqf:replace>
+                <sqf:delete match="xs:complexType | xs:simpleType"/>
+            </sqf:fix>
+
+
+
+
+            <sqf:fix id="vb.check.ref.conversion" use-when="$existEl/@type and not($existEl/xs:complexType)">
+                <sqf:description>
+                    <sqf:title>Convert element reference to type reference</sqf:title>
+                </sqf:description>
+                <sqf:add target="type" node-type="attribute" select="concat($existEl/@type, '')"/>
+                <sqf:add target="name" node-type="attribute" select="concat(@ref, '')"/>
+                <sqf:delete match="@ref"/>
+            </sqf:fix>
+
+            <sch:let name="name" value="@name"/>
+            <sch:report test="xs:complexType" sqf:fix="vb.check.complexType.conversion">Do not use local complex types. The choosen design pattern states that complex type should only be global.</sch:report>
+
+            <sqf:fix id="vb.check.complexType.conversion">
+                <sqf:description>
+                    <sqf:title>Converts local to global complex type.</sqf:title>
+                </sqf:description>
+                <sch:let name="ct" value="xs:complexType"/>
+                <sqf:add match="ancestor-or-self::* intersect /xs:schema/*" position="after">
+                    <xs:complexType>
+                        <xsl:copy-of select="$ct/@*" copy-namespaces="no"/>
+                        <xsl:attribute name="name" select="concat($name, 'Type')"/>
+                        <xsl:copy-of select="$ct/node()" copy-namespaces="no"/>
+                    </xs:complexType>
+                </sqf:add>
+                <sqf:add target="type" node-type="attribute" select="concat($name, 'Type')"/>
+                <sqf:delete match="$ct"/>
+            </sqf:fix>
+
+        </sch:rule>
+    </sch:pattern>
 
     <sqf:fixes>
         <sqf:fix id="setGuideActive">
