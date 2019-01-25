@@ -105,6 +105,41 @@
                 </xs:sequence>
             </x:expect>
         </x:scenario>
+        
+        <x:scenario label="createContentByDTD - with spec multiplier">
+            <x:call>
+                <x:param name="dtd.syntax" select="'element{2:8}'"/>
+            </x:call>
+            <x:expect label="result">
+                <xs:sequence>
+                    <xs:element name="element" minOccurs="2" maxOccurs="8"/>
+                </xs:sequence>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="createContentByDTD - with spec multiplier but default values">
+            <x:call>
+                <x:param name="dtd.syntax" select="'element{1:1}'"/>
+            </x:call>
+            <x:expect label="result">
+                <xs:sequence>
+                    <xs:element name="element"/>
+                </xs:sequence>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="createContentByDTD - with spec multiplier, max unbounded">
+            <x:call>
+                <x:param name="dtd.syntax" select="'element{5:}'"/>
+            </x:call>
+            <x:expect label="result">
+                <xs:sequence>
+                    <xs:element name="element" minOccurs="5" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </x:expect>
+        </x:scenario>
+        
+        
 
 
 
@@ -211,6 +246,28 @@
                         <xs:choice>
                             <xs:element name="c"/>
                             <xs:sequence>
+                                <xs:element name="d"/>
+                                <xs:element name="e"/>
+                            </xs:sequence>
+                        </xs:choice>
+                    </xs:sequence>
+                    <xs:element name="f"/>
+                </xs:sequence>
+            </x:expect>
+        </x:scenario>
+        
+        <x:scenario label="createContentByDTD - complex mix of choice, sequence and spec multiplier for brackets">
+            <x:call>
+                <x:param name="dtd.syntax" select="'(a, (b, (c | (d, e){0:7}){3:3}){1:1}, f){5:}'"/>
+            </x:call>
+            <x:expect label="result">
+                <xs:sequence minOccurs="5" maxOccurs="unbounded">
+                    <xs:element name="a"/>
+                    <xs:sequence>
+                        <xs:element name="b"/>
+                        <xs:choice minOccurs="3" maxOccurs="3">
+                            <xs:element name="c"/>
+                            <xs:sequence minOccurs="0" maxOccurs="7">
                                 <xs:element name="d"/>
                                 <xs:element name="e"/>
                             </xs:sequence>
