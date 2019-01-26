@@ -87,6 +87,49 @@
                     </execution>
                 </executions>
             </plugin>            
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id><!-- here the phase you need--> 
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.addon}/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/non-packaged-resources</directory>
+                                    <include>extension.xml</include>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <!-- skip when version is SNAPSHOT -->
+                            <skip>${project.version.is.snapshot}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-addon</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.addon}/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <include>${project.artifactId}-${project.version}-utils.zip</include>
+                                </resource>
+                            </resources>
+                            <!-- skip when version is SNAPSHOT -->
+                            <skip>${project.version.is.snapshot}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
