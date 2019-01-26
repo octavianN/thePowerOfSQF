@@ -3,7 +3,7 @@
     <groupId>de.data2type</groupId>
     <artifactId>xsdguide</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>Oxygen Framework Custom Project</name>
+    <name>XSD Guide</name>
     
     <properties>
     </properties>
