@@ -5,21 +5,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>Oxygen Framework Custom Project</name>
     
-    <parent>
-        <groupId>de.data2type</groupId>
-        <artifactId>maven-mother</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
-    </parent>
-    
-    
     <properties>
-        <d2t.run.xspec/>
-        <d2t.publish.utils/>
-        <d2t.oxygen.project.maintenance/>
-<!--        <d2t.create.app/>-->
-<!--        <d2t.styleguide.framework/>-->
-<!--        <d2t.dependency.catalog/>-->
-<!--        <d2t.styleguide.mvncheck/>-->
     </properties>
     
     
