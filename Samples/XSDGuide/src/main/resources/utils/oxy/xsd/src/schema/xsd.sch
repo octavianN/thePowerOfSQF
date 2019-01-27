@@ -94,6 +94,7 @@
                 <sqf:add position="last-child">
                     <sqf:copy-of select="d2t:defElementDef($vb.root.element.name)"/>
                 </sqf:add>
+                <sqf:add match="$config" node-type="attribute" target="root" select="$vb.root.element.name"/>
             </sqf:fix>
         </sch:rule>
     </sch:pattern>
@@ -631,6 +632,24 @@
             </sqf:fix>
 
         </sch:rule>
+        
+        <sch:rule context="xs:schema/xs:element[@name]" role="warn">
+            <sch:assert test="key('element-ref', @name) or $config/@root/tokenize(., '\s') = @name" sqf:fix="sl.check.delete sl.check.asRoot">The type <sch:value-of select="@name"/> is not used for any element.</sch:assert>
+            <sqf:fix id="sl.check.delete">
+                <sqf:description>
+                    <sqf:title>Delete the element <sch:value-of select="@name"/></sqf:title>
+                </sqf:description>
+                <sqf:delete/>
+            </sqf:fix>
+            <sqf:fix id="sl.check.asRoot">
+                <sqf:description>
+                    <sqf:title>Specify the <sch:value-of select="@name"/> element as possible root element.</sqf:title>
+                </sqf:description>
+                <sch:let name="nRoot" value="string-join(($config/@root, @name), ' ')"/>
+                <sqf:add match="$config" target="root" node-type="attribute" select="$nRoot"/>
+            </sqf:fix>
+        </sch:rule>
+        
     </sch:pattern>
 
     <sqf:fixes>
