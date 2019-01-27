@@ -66,6 +66,7 @@
 
     <sch:pattern id="vb.root">
         <sch:rule context="node()[$status = 'inactive']"/>
+        <sch:rule context="node()[not($isSalamiSlice or $isVenetianBlind)]"/>
         <sch:rule context="xs:schema" role="info">
             <sch:assert test="xs:element" sqf:fix="vb.root.define sl.root.define">You should start with a root element</sch:assert>
             <sqf:fix id="vb.root.define" use-when="$isVenetianBlind">
@@ -132,7 +133,7 @@
     <sch:pattern icon="vb.elementType">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($design-pattern = 'venetian-blind')]"/>
-        <sch:rule context="xs:complexType">
+        <sch:rule context="xs:complexType" role="info">
             <sch:let name="name" value="@name"/>
             <sch:let name="declWoType" value=".//xs:element[@name][not(xs:complexType)][not(@type)]"/>
             <sch:report test="$declWoType" sqf:fix="vb.elementType.allComplex">There are elements in the type <sch:value-of select="$name"/> without a type.</sch:report>
@@ -332,7 +333,7 @@
 
     <sch:pattern id="vb.check">
         <sch:rule context="node()[not($design-pattern = 'venetian-blind')]"/>
-        <sch:rule context="xs:element">
+        <sch:rule context="xs:element" role="warn">
             <sch:let name="ref" value="@ref"/>
             <sch:let name="refEl" value="/xs:schema/xs:element[@name = $ref]"/>
             <sch:report test="@ref" sqf:fix="vb.check.refAndCt.conversion vb.check.ref.conversion">Do not refer to other elements. The choosen design pattern states that with type attributes should refered to global types.</sch:report>
