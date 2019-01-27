@@ -380,6 +380,16 @@
             </sqf:fix>
 
         </sch:rule>
+        
+        <sch:rule context="xs:schema/xs:complexType[@name]" role="warn">
+            <sch:assert test="key('element-type', @name)" sqf:fix="delete">The type <sch:value-of select="@name"/> is not used for any element.</sch:assert>
+            <sqf:fix id="delete">
+                <sqf:description>
+                    <sqf:title>Delete the type <sch:value-of select="@name"/></sqf:title>
+                </sqf:description>
+                <sqf:delete/>
+            </sqf:fix>
+        </sch:rule>
     </sch:pattern>
 
     <!--    

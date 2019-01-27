@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d2t="http://www.data2type.de" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="3.0">
+    
+    <xsl:key name="element-type" match="xs:element[@name]" use="@type"/>
+
     <xsl:function name="d2t:guide-cleanup" as="node()">
         <xsl:param name="context" as="element()"/>
         <xsl:param name="delete" as="xs:string"/>
