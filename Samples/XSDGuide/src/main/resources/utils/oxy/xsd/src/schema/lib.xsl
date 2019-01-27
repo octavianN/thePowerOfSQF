@@ -287,7 +287,28 @@
                         ($depest-grouping/*)"/>
         </xsl:document>
     </xsl:function>
-
+    
+    <xsl:function name="d2t:mergeXSDtypes">
+        <xsl:param name="xsd"/>
+        <xsl:param name="base"/>
+        <xsl:apply-templates select="$xsd" mode="d2t:mergeXSDtypes">
+            <xsl:with-param name="base" select="$base" tunnel="yes"/>
+        </xsl:apply-templates>
+    </xsl:function>
+    
+    <xsl:template match="xs:element[@name]" mode="d2t:mergeXSDtypes">
+        <xsl:param name="base" tunnel="yes" as="node()*"/>
+        <xsl:variable name="name" select="@name"/>
+        <xsl:variable name="baseDecl" select="$base//xs:element[@name = $name]"/>
+        
+        <xsl:copy>
+            <xsl:apply-templates select="@*" mode="#current"/>
+            <xsl:copy-of select="$baseDecl/@type"/>
+            <xsl:apply-templates select="node()" mode="#current"/>
+        </xsl:copy>
+        
+    </xsl:template>
+    
     <xsl:function name="d2t:defComplexType" as="element(xs:complexType)">
         <xsl:param name="name" as="xs:string"/>
         <xsl:sequence select="d2t:defComplexType($name, '')"/>

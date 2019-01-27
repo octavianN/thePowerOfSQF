@@ -105,14 +105,15 @@
             <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-content" sqf:fix="vb.content.dtd vb.content.no">Please check the content for the type <sch:value-of select="@name"/>.</sch:report>
             <sqf:fix id="vb.content.dtd">
                 <sqf:description>
-                    <sqf:title>Edit the content with DTD syntax</sqf:title>
+                    <sqf:title>Edit/Specify the content with DTD syntax</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="vb.content.dtd.spec" default="d2t:createDTDbyXSD(xs:sequence | xs:choice)">
                     <sqf:description>
                         <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
-                <sqf:replace match="xs:sequence | xs:choice" select="d2t:createContentByDTD($vb.content.dtd.spec)"/>
+                <sch:let name="existing" value="xs:sequence | xs:choice"/>
+                <sqf:replace match="xs:sequence | xs:choice" select="d2t:mergeXSDtypes(d2t:createContentByDTD($vb.content.dtd.spec), $existing)"/>
                 <sqf:add match="xs:annotation" position="after" select="d2t:createContentByDTD($vb.content.dtd.spec)" use-when="not(xs:sequence | xs:choice)"/>
                 <sqf:add node-type="attribute" target="mixed" select="contains($vb.content.dtd.spec, '#PCDATA')"/>
             </sqf:fix>
