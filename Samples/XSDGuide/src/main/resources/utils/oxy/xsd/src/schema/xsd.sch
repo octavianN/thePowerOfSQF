@@ -47,7 +47,7 @@
             <sch:assert test="$design-pattern = ('venetian-blind', 'salami-slice')" sqf:fix="mode.venetian.blind mode.element.based setGuideInActive">Please select the basic XSD design pattern. Possible patterns are: "Venetian Blind" or "Salami Slice".</sch:assert>
             <sqf:fix id="mode.venetian.blind">
                 <sqf:description>
-                    <sqf:title>Choose the type Venetian Blind.</sqf:title>
+                    <sqf:title>Choose the Venetian Blind pattern.</sqf:title>
                     <sqf:p>The Venetian Blind pattern will generate for each element top-level xsd:complexType or xsd:simpleType elements.</sqf:p>
                     <sqf:p>The local elements will refer to theese types by type attributes.</sqf:p>
                 </sqf:description>
@@ -64,7 +64,7 @@
         </sch:rule>
     </sch:pattern>
 
-    <sch:pattern id="vb.root">
+    <sch:pattern id="g.root">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($isSalamiSlice or $isVenetianBlind)]"/>
         <sch:rule context="xs:schema" role="info">
@@ -135,7 +135,7 @@
         <sch:rule context="node()[not($design-pattern = 'venetian-blind')]"/>
         <sch:rule context="xs:complexType" role="info">
             <sch:let name="name" value="@name"/>
-            <sch:let name="declWoType" value=".//xs:element[@name][not(xs:complexType)][not(@type)]"/>
+            <sch:let name="declWoType" value=".//xs:element[@name][not(xs:complexType|@type)]"/>
             <sch:report test="$declWoType" sqf:fix="vb.elementType.allComplex">There are elements in the type <sch:value-of select="$name"/> without a type.</sch:report>
             
             <sqf:fix id="vb.elementType.allComplex">
