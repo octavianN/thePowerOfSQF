@@ -399,23 +399,24 @@
     <sch:pattern id="sl.content">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($isSalamiSlice)]"/>
-        <sch:rule context="xs:element/xs:complexType[not(xs:sequence | xs:choice)]" role="info" subject="..">
-            <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-content" sqf:fix="sl.content.dtd sl.content.no">Do you need some children for the element <sch:value-of select="../@name"/>?</sch:report>
+        <sch:rule context="xs:element/xs:complexType" role="info" subject="..">
+            <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-content" sqf:fix="sl.content.dtd sl.content.no">Please check the content for the element <sch:value-of select="../@name"/>.</sch:report>
             <sqf:fix id="sl.content.dtd">
                 <sqf:description>
-                    <sqf:title>Specify the content with DTD syntax</sqf:title>
+                    <sqf:title>Edit/Specify the content with DTD syntax</sqf:title>
                 </sqf:description>
-                <sqf:user-entry name="sl.content.dtd.spec">
+                <sqf:user-entry name="sl.content.dtd.spec" default="d2t:createDTDbyXSD(xs:sequence | xs:choice)">
                     <sqf:description>
                         <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
-                <sqf:add match="xs:annotation" position="after" select="d2t:createContentByDTDforSalamiSlice($sl.content.dtd.spec)"/>
+                <sqf:replace match="xs:sequence | xs:choice" select="d2t:createContentByDTDforSalamiSlice($sl.content.dtd.spec)"/>
+                <sqf:add match="xs:annotation" position="after" select="d2t:createContentByDTDforSalamiSlice($sl.content.dtd.spec)" use-when="not(xs:sequence | xs:choice)"/>
                 <sqf:add node-type="attribute" target="mixed" select="contains($sl.content.dtd.spec, '#PCDATA')"/>
             </sqf:fix>
             <sqf:fix id="sl.content.no">
                 <sqf:description>
-                    <sqf:title>No more children</sqf:title>
+                    <sqf:title>The content is complete.</sqf:title>
                 </sqf:description>
                 <sqf:delete match="d2t:guide-cleanup(., 'check-content')"/>
             </sqf:fix>

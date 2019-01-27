@@ -451,7 +451,7 @@
     </xsl:template>
 
     <xsl:template match="xs:element" mode="d2t:xsd2dtd">
-        <xsl:value-of select="@name || d2t:createDTDMultiplier(.)"/>
+        <xsl:value-of select="(@name|@ref)[1] || d2t:createDTDMultiplier(.)"/>
     </xsl:template>
 
     <xsl:template match="node()" mode="d2t:xsd2dtd"> </xsl:template>
