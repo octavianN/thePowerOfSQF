@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xt:extension id="de.data2type.xsdguide" xmlns:xt="http://www.oxygenxml.com/ns/extension" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.oxygenxml.com/ns/extension http://www.oxygenxml.com/ns/extension/extensions.xsd">
-    <xt:location href="${project.artifactId}-${project.version}-utils.zip"/>
+    <xt:location href="${project.artifactId}-${project.version}-addon.zip"/>
     <xt:version>${project.version}</xt:version>
     <xt:oxy_version>20.0+</xt:oxy_version>
     <xt:type>framework</xt:type>

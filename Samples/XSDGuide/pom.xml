@@ -74,9 +74,6 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.5.3</version>
-                <configuration>
-                    <descriptor>src/main/assembly/assembly.xml</descriptor>
-                </configuration>
                 <executions>
                     <execution>
                         <id>make-addon</id>
@@ -84,6 +81,9 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <descriptor>src/main/assembly/assembly-addon.xml</descriptor>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>            
@@ -121,7 +121,7 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}</directory>
-                                    <include>${project.artifactId}-${project.version}-utils.zip</include>
+                                    <include>${project.artifactId}-${project.version}-addon.zip</include>
                                 </resource>
                             </resources>
                             <!-- skip when version is SNAPSHOT -->
