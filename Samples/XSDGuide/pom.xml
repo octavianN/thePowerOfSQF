@@ -85,6 +85,16 @@
                             <descriptor>src/main/assembly/assembly-addon.xml</descriptor>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>make-src</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptor>src/main/assembly/assembly-src.xml</descriptor>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>            
             <plugin>
@@ -122,6 +132,7 @@
                                 <resource>
                                     <directory>${project.build.directory}</directory>
                                     <include>${project.artifactId}-${project.version}-addon.zip</include>
+                                    <include>${project.artifactId}-${project.version}-src.zip</include>
                                 </resource>
                             </resources>
                             <!-- skip when version is SNAPSHOT -->
