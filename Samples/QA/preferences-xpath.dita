@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+  PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
+<?xml-model href="rules.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<topic id="topic_dxg_pzp_4gb">
+  <title>XPath Preferences</title>
+  <body>
+    <p>Oxygen allows you to customize the following options:</p>
+    <p>
+      <dl>
+        <dlentry>
+          <dt>Unescape XPath expression</dt>
+          <dd>If selected, the entities of an XPath expressions are unescaped during their
+            execution. For example, the
+            expression:<screen>//varlistentry[starts-with(@os,'&amp;#x73;')] is equivalent to: 
+//varlistentry[starts-with(@os,'s')]</screen></dd>
+        </dlentry>
+        <dlentry>
+          <dt>XPath Default Namespace</dt>
+          <dd>You can choose between the following four options:<ul>
+              <li>No namespace - If selected, unprefixed element names are considered as belonging
+                to no namespace.</li>
+              <li>Use the default namespace from the root element (default selection)</li>
+            </ul><ul>
+              <li>Use the namespace of the root - If selected, unprefixed element names are
+                considered as belonging to the same namespace as the root element of the XML
+                document you are querying.</li>
+              <li>This namespace - use the corresponding text field to enter the namespace of the
+                unprefixed elements.</li>
+            </ul></dd>
+        </dlentry>
+      </dl>
+    </p>
+  </body>
+</topic>
