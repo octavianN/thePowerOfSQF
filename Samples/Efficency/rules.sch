@@ -356,8 +356,8 @@
   <!-- Add a in prolog keyword before body --> 
   <sch:pattern>
     <sch:rule context="topic">
-      <sch:assert test="exists(prolog//keywords)" sqf:fix="addKeywords" role="warn">
-        No kewords are set for the current topic.
+      <sch:assert test="exists(prolog/metadata/keywords)" sqf:fix="addKeywords" role="warn">
+        No keywords are set for the current topic.
       </sch:assert>
       <sqf:fix id="addKeywords">
         <sqf:description>
@@ -365,7 +365,7 @@
         </sqf:description>
         <sqf:user-entry name="keyword">
           <sqf:description>
-            <sqf:title>Keyword value</sqf:title>
+            <sqf:title>Keyword value:</sqf:title>
           </sqf:description>
         </sqf:user-entry>
         
