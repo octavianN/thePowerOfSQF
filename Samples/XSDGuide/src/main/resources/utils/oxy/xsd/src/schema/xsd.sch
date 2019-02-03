@@ -10,11 +10,6 @@
     <sch:let name="design-pattern" value="$config/@mode"/>
 
     <sch:let name="es-impl" value="function-available('es:getPhase')"/>
-    <sch:let name="firstOrAll" value="
-            if ($es-impl) then
-                true()
-            else
-                1"/>
     <sch:let name="xsd-common-types" value="
             ('xs:string',
             'xs:boolean',
@@ -154,10 +149,30 @@
         </sch:rule>
         <sch:rule context="xs:element[@name][not(xs:complexType)]" role="info">
             <sch:let name="name" value="@name"/>
-            <sch:assert test="@type" sqf:fix="vb.elementType.complexNew vb.elementType.complexReuse vb.elementType.simpleType vb.elementType.xsdtype">Please specify the type of the element <sch:value-of select="$name"/>.</sch:assert>
+            <sch:assert test="@type" sqf:fix="vb.elementType.complexNew vb.elementType.xsdtype vb.elementType.simpleType vb.elementType.complexReuse">Please specify the type of the element <sch:value-of select="$name"/>.</sch:assert>
+            <sqf:fix id="vb.elementType.complexNew">
+                <sqf:description>
+                    <sqf:title>Create a new complex type</sqf:title>
+                </sqf:description>
+                <sch:let name="countExist" value="count(/xs:schema/xs:complexType[matches(@name, concat($name, 'Type\d*'))])"/>
+                <sch:let name="suf" value="($countExist + 1)[. > 1]"/>
+                <sqf:add match="ancestor::xs:complexType" position="after" select="d2t:defComplexType($name, $suf)"/>
+                <sqf:add node-type="attribute" target="type" select="concat($name, 'Type', $suf)"/>
+            </sqf:fix>
+            <sqf:fix id="vb.elementType.xsdtype">
+                <sqf:description>
+                    <sqf:title>Use an XSD primivtive data type (xs:string, xs:integer, ...).</sqf:title>
+                </sqf:description>
+                <sqf:user-entry name="type" default="$types-as-default">
+                    <sqf:description>
+                        <sqf:title>Use one of the XSD build-in types.</sqf:title>
+                    </sqf:description>
+                </sqf:user-entry>
+                <sqf:add node-type="attribute" target="type" select="$type"/>
+            </sqf:fix>
             <sqf:fix id="vb.elementType.simpleType">
                 <sqf:description>
-                    <sqf:title>Create a new custom simple type</sqf:title>
+                    <sqf:title>Create a new custom simple type.</sqf:title>
                 </sqf:description>
                 <sch:let name="countExist" value="count(/xs:schema/xs:simpleType[matches(@name, concat($name, 'Type\d*'))])"/>
                 <sch:let name="suf" value="($countExist + 1)[. > 1]"/>
@@ -172,26 +187,6 @@
                         </xs:annotation>
                     </xs:simpleType>
                 </sqf:add>
-                <sqf:add node-type="attribute" target="type" select="concat($name, 'Type', $suf)"/>
-            </sqf:fix>
-            <sqf:fix id="vb.elementType.xsdtype">
-                <sqf:description>
-                    <sqf:title>Use an XSD primivtive data type (xs:string, xs:integer, ...).</sqf:title>
-                </sqf:description>
-                <sqf:user-entry name="type" default="$types-as-default">
-                    <sqf:description>
-                        <sqf:title>Use one of the XSD build-in types.</sqf:title>
-                    </sqf:description>
-                </sqf:user-entry>
-                <sqf:add node-type="attribute" target="type" select="$type"/>
-            </sqf:fix>
-            <sqf:fix id="vb.elementType.complexNew">
-                <sqf:description>
-                    <sqf:title>Create a new complex type</sqf:title>
-                </sqf:description>
-                <sch:let name="countExist" value="count(/xs:schema/xs:complexType[matches(@name, concat($name, 'Type\d*'))])"/>
-                <sch:let name="suf" value="($countExist + 1)[. > 1]"/>
-                <sqf:add match="ancestor::xs:complexType" position="after" select="d2t:defComplexType($name, $suf)"/>
                 <sqf:add node-type="attribute" target="type" select="concat($name, 'Type', $suf)"/>
             </sqf:fix>
             <sqf:fix id="vb.elementType.complexReuse" use-for-each="/xs:schema/(xs:complexType | xs:simpleType)[matches(@name, concat($name, 'Type\d*'))]">
@@ -216,32 +211,8 @@
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($design-pattern = 'venetian-blind')]"/>
         <sch:rule context="xs:complexType" role="info">
-            <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-attributes" sqf:fix="vb.attribute.add.custom vb.attribute.add.oxy vb.attribute.add.es vb.attribute.no">Do you need some attributes for the type <sch:value-of select="@name"/>?</sch:report>
+            <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-attributes" sqf:fix="vb.attribute.add.oxy vb.attribute.add.es vb.attribute.add.custom vb.attribute.no">Do you need some attributes for the type <sch:value-of select="@name"/>?</sch:report>
 
-            <sqf:fix id="vb.attribute.add.custom">
-                <sqf:description>
-                    <sqf:title>Add attribute with custom type</sqf:title>
-                </sqf:description>
-                <sqf:user-entry name="vb.attribute.add.custom.name">
-                    <sqf:description>
-                        <sqf:title>Specifiy the local name</sqf:title>
-                    </sqf:description>
-                </sqf:user-entry>
-                <sqf:add position="last-child">
-                    <xs:attribute name="{$vb.attribute.add.custom.name}" type="{$vb.attribute.add.custom.name}Type"/>
-                </sqf:add>
-                <sqf:add match="/xs:schema" position="last-child">
-                    <xs:simpleType name="{$vb.attribute.add.custom.name}Type">
-                        <xs:annotation>
-                            <xs:appinfo>
-                                <d2t:xsdguide xmlns:d2t="http://www.data2type.de">
-                                    <d2t:spec-simpleType/>
-                                </d2t:xsdguide>
-                            </xs:appinfo>
-                        </xs:annotation>
-                    </xs:simpleType>
-                </sqf:add>
-            </sqf:fix>
             <sqf:fix id="vb.attribute.add.es" use-when="$es-impl">
                 <sqf:description>
                     <sqf:title>Add attribute with an XSD primivtive data type.</sqf:title>
@@ -272,6 +243,30 @@
                 </sqf:user-entry>
                 <sqf:add position="last-child">
                     <xs:attribute name="{$vb.attribute.add.name}" type="{$type}"/>
+                </sqf:add>
+            </sqf:fix>
+            <sqf:fix id="vb.attribute.add.custom">
+                <sqf:description>
+                    <sqf:title>Add attribute with a new custom type.</sqf:title>
+                </sqf:description>
+                <sqf:user-entry name="vb.attribute.add.custom.name">
+                    <sqf:description>
+                        <sqf:title>Specifiy the attribute name.</sqf:title>
+                    </sqf:description>
+                </sqf:user-entry>
+                <sqf:add position="last-child">
+                    <xs:attribute name="{$vb.attribute.add.custom.name}" type="{$vb.attribute.add.custom.name}Type"/>
+                </sqf:add>
+                <sqf:add match="/xs:schema" position="last-child">
+                    <xs:simpleType name="{$vb.attribute.add.custom.name}Type">
+                        <xs:annotation>
+                            <xs:appinfo>
+                                <d2t:xsdguide xmlns:d2t="http://www.data2type.de">
+                                    <d2t:spec-simpleType/>
+                                </d2t:xsdguide>
+                            </xs:appinfo>
+                        </xs:annotation>
+                    </xs:simpleType>
                 </sqf:add>
             </sqf:fix>
             <sqf:fix id="vb.attribute.no">
