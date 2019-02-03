@@ -7,7 +7,7 @@ The XSD Guide is designed to guide an inexperienced developer through the cliffs
 The XSD Guide is tested with 
 
 - Oxygen XML Editor v20.1
-- Escali Plugin v0.1.4 & Oxygen XML Editor v20.0
+- Escali Plugin v0.2.0 & Oxygen XML Editor v20.0
 
 ## Installation
 
@@ -25,7 +25,7 @@ The XSD Guide is tested with
 1. Download the source files: [https://raw.githubusercontent.com/octavianN/thePowerOfSQF/Samples/xsdguide/build/xsdguide-1.0.0-src.zip](https://raw.githubusercontent.com/octavianN/thePowerOfSQF/Samples/xsdguide/build/xsdguide-1.0.0-src.zip)
 1. Extract the zip into any folder (XSD Guide install dir).
 1. Go to Oxygen > Window > View > Escali Schematron > Options (gear symbol, in the top right corner).
-1. Activate the optoin "Detect schema by the following rule table"
+1. Activate the option "Detect schema by the following rule table"
 1. Add a rule or row, by using the add button (plus symbol at the right side)
 1. Fill the row:
     1. Schema: Select *XSD guide install dir* > xsdguide-1.0.0/xsd.sch
@@ -47,7 +47,6 @@ The XSD Guide is tested with
 
 1. Go to Oxygen > File > New file...
 1. Choose the XML-Schema template
-1. Save, close and reopen the file
 1. Let Oxygen validate the file
 1. In the view Escali Schematron the info "The XSD guide is inactive" should be listed and the root element `xs:schema` should be underlined.
 1. Execute the QuickFix "Set the XSD guide active" by one of two alternative ways:
