@@ -13,6 +13,11 @@
                     <p><strong>${project.name}</strong> Version: <span class="version">${project.version}, build ${buildNumber}</span><br/>© ${current.year} data2type GmbH. All Rights Reserved.</p>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <p><a href="https://github.com/octavianN/thePowerOfSQF/tree/master/Samples/XSDGuide">GitHub project</a></p>
+                </td>
+            </tr>
         </table>
     </xt:description>
     <xt:license><![CDATA[END USER LICENSE AGREEMENT FOR XSD Guide
