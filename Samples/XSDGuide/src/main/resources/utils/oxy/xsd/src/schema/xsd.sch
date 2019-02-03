@@ -48,7 +48,7 @@
             <sqf:fix id="mode.venetian.blind">
                 <sqf:description>
                     <sqf:title>Choose the Venetian Blind pattern.</sqf:title>
-                    <sqf:p>The Venetian Blind pattern will generate for each element top-level xsd:complexType or xsd:simpleType elements.</sqf:p>
+                    <sqf:p>The Venetian Blind pattern will generate top-level xsd:complexType or xsd:simpleType elements for each element.</sqf:p>
                     <sqf:p>The local elements will refer to theese types by type attributes.</sqf:p>
                 </sqf:description>
                 <sqf:add match="$config" target="mode" node-type="attribute" select="'venetian-blind'"/>
@@ -56,7 +56,7 @@
             <sqf:fix id="mode.element.based">
                 <sqf:description>
                     <sqf:title>Choose the Salami Slice pattern.</sqf:title>
-                    <sqf:p>The Salami Slice pattern will genereate for each element top-level xsd:element elements.</sqf:p>
+                    <sqf:p>The Salami Slice pattern will genereate top-level xsd:element elements for each element.</sqf:p>
                     <sqf:p>The local element declarations will refer to theese elements by ref attributes.</sqf:p>
                 </sqf:description>
                 <sqf:add match="$config" target="mode" node-type="attribute" select="'salami-slice'"/>
@@ -68,10 +68,10 @@
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="node()[not($isSalamiSlice or $isVenetianBlind)]"/>
         <sch:rule context="xs:schema" role="info">
-            <sch:assert test="xs:element" sqf:fix="vb.root.define sl.root.define">You should start with a root element</sch:assert>
+            <sch:assert test="xs:element" sqf:fix="vb.root.define sl.root.define">You should start with a root element.</sch:assert>
             <sqf:fix id="vb.root.define" use-when="$isVenetianBlind">
                 <sqf:description>
-                    <sqf:title>Define a root element name</sqf:title>
+                    <sqf:title>Define a root element name.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="vb.root.element.name">
                     <sqf:description>
@@ -85,7 +85,7 @@
             </sqf:fix>
             <sqf:fix id="sl.root.define" use-when="$isSalamiSlice">
                 <sqf:description>
-                    <sqf:title>Define a root element name</sqf:title>
+                    <sqf:title>Define a root element name.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="vb.root.element.name">
                     <sqf:description>
@@ -107,11 +107,11 @@
             <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-content" sqf:fix="vb.content.dtd vb.content.no">Please check the content for the type <sch:value-of select="@name"/>.</sch:report>
             <sqf:fix id="vb.content.dtd">
                 <sqf:description>
-                    <sqf:title>Edit/Specify the content with DTD syntax</sqf:title>
+                    <sqf:title>Edit/Specify the content with DTD syntax.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="vb.content.dtd.spec" default="d2t:createDTDbyXSD(xs:sequence | xs:choice)">
                     <sqf:description>
-                        <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
+                        <sqf:title>Use the usual DTD syntax to specify the content.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sch:let name="existing" value="xs:sequence | xs:choice"/>
@@ -176,11 +176,11 @@
             </sqf:fix>
             <sqf:fix id="vb.elementType.xsdtype">
                 <sqf:description>
-                    <sqf:title>Use a build in type</sqf:title>
+                    <sqf:title>Use an XSD primivtive data type (xs:string, xs:integer, ...).</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="type" default="$types-as-default">
                     <sqf:description>
-                        <sqf:title>Use one of the build-in types</sqf:title>
+                        <sqf:title>Use one of the XSD build-in types.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add node-type="attribute" target="type" select="$type"/>
@@ -201,7 +201,7 @@
                                 if ($sqf:current/self::xs:complexType) then
                                     'complex'
                                 else
-                                    'simple'"/> type "<sch:value-of select="$tName"/>"</sqf:title>
+                                    'simple'"/> type "<sch:value-of select="$tName"/>".</sqf:title>
                 </sqf:description>
                 <sqf:add node-type="attribute" target="type">
                     <sch:value-of select="$tName"/>
@@ -244,16 +244,16 @@
             </sqf:fix>
             <sqf:fix id="vb.attribute.add.es" use-when="$es-impl">
                 <sqf:description>
-                    <sqf:title>Add attribute with the an build-in type.</sqf:title>
+                    <sqf:title>Add attribute with an XSD primivtive data type.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="vb.attribute.add.type" default="$types-as-default">
                     <sqf:description>
-                        <sqf:title>Select the simple type</sqf:title>
+                        <sqf:title>Select the simple type.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:user-entry name="vb.attribute.add.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name</sqf:title>
+                        <sqf:title>Specifiy the attribute name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -263,11 +263,11 @@
             <sqf:fix id="vb.attribute.add.oxy" use-for-each="$xsd-common-types" use-when="not($es-impl)">
                 <sch:let name="type" value="$sqf:current"/>
                 <sqf:description>
-                    <sqf:title>Add attribute with the type "<sch:value-of select="$type"/>"</sqf:title>
+                    <sqf:title>Add an attribute with the type "<sch:value-of select="$type"/>".</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="vb.attribute.add.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name</sqf:title>
+                        <sqf:title>Specifiy the local name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -276,7 +276,7 @@
             </sqf:fix>
             <sqf:fix id="vb.attribute.no">
                 <sqf:description>
-                    <sqf:title>No more attributes</sqf:title>
+                    <sqf:title>No more attributes.</sqf:title>
                 </sqf:description>
                 <sqf:delete match="d2t:guide-cleanup(., 'check-attributes')"/>
             </sqf:fix>
@@ -291,7 +291,7 @@
             <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:spec-simpleType" sqf:fix="g.simpleType.regex g.simpleType.enum">Please specify the simple type.</sch:report>
             <sqf:fix id="g.simpleType.regex">
                 <sqf:description>
-                    <sqf:title>Restrict the type via regex</sqf:title>
+                    <sqf:title>Restrict the type via regex.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="g.simpleType.regex.pattern">
                     <sqf:description>
@@ -307,7 +307,7 @@
             </sqf:fix>
             <sqf:fix id="g.simpleType.enum">
                 <sqf:description>
-                    <sqf:title>Specify a enumeration.</sqf:title>
+                    <sqf:title>Specify an enumeration.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="g.simpleType.enum.values">
                     <sqf:description>
@@ -339,7 +339,7 @@
             <sch:report test="@ref" sqf:fix="vb.check.refAndCt.conversion vb.check.ref.conversion">Do not refer to other elements. The choosen design pattern states that with type attributes should refered to global types.</sch:report>
             <sqf:fix id="vb.check.refAndCt.conversion" use-when="$refEl/xs:complexType">
                 <sqf:description>
-                    <sqf:title>Convert element reference to type reference</sqf:title>
+                    <sqf:title>Convert element reference to type reference.</sqf:title>
                 </sqf:description>
                 <sqf:replace match="$refEl">
                     <xs:complexType>
@@ -355,7 +355,7 @@
 
             <sqf:fix id="vb.check.ref.conversion" use-when="$refEl/@type and not($refEl/xs:complexType)">
                 <sqf:description>
-                    <sqf:title>Convert element reference to type reference</sqf:title>
+                    <sqf:title>Convert element reference to type reference.</sqf:title>
                 </sqf:description>
                 <sqf:add target="type" node-type="attribute" select="concat($refEl/@type, '')"/>
                 <sqf:add target="name" node-type="attribute" select="concat(@ref, '')"/>
@@ -387,7 +387,7 @@
             <sch:assert test="key('element-type', @name)" sqf:fix="delete">The type <sch:value-of select="@name"/> is not used for any element.</sch:assert>
             <sqf:fix id="delete">
                 <sqf:description>
-                    <sqf:title>Delete the type <sch:value-of select="@name"/></sqf:title>
+                    <sqf:title>Delete the type <sch:value-of select="@name"/>.</sqf:title>
                 </sqf:description>
                 <sqf:delete/>
             </sqf:fix>
@@ -405,11 +405,11 @@
             <sch:report test="xs:annotation/xs:appinfo/d2t:xsdguide/d2t:check-content" sqf:fix="sl.content.dtd sl.content.no">Please check the content for the element <sch:value-of select="../@name"/>.</sch:report>
             <sqf:fix id="sl.content.dtd">
                 <sqf:description>
-                    <sqf:title>Edit/Specify the content with DTD syntax</sqf:title>
+                    <sqf:title>Edit/Specify the content with DTD syntax.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="sl.content.dtd.spec" default="d2t:createDTDbyXSD(xs:sequence | xs:choice)">
                     <sqf:description>
-                        <sqf:title>Use the usual DTD syntax to specify the content</sqf:title>
+                        <sqf:title>Use the usual DTD syntax to specify the content.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:replace match="xs:sequence | xs:choice" select="d2t:createContentByDTDforSalamiSlice($sl.content.dtd.spec)"/>
@@ -451,7 +451,7 @@
             <sch:assert test="/xs:schema/xs:element[@name = $ref]" sqf:fix="sl.elementType.complexNew sl.elementType.simpleType sl.elementType.xsdtype">Please add a declaration for the element <sch:value-of select="$ref"/>.</sch:assert>
             <sqf:fix id="sl.elementType.simpleType">
                 <sqf:description>
-                    <sqf:title>Create a declaration with a custom simple type</sqf:title>
+                    <sqf:title>Create a declaration with a custom simple type.</sqf:title>
                 </sqf:description>
                 <sqf:add match="ancestor::xs:element" position="after">
                     <xs:element name="{$ref}">
@@ -469,11 +469,11 @@
             </sqf:fix>
             <sqf:fix id="sl.elementType.xsdtype">
                 <sqf:description>
-                    <sqf:title>Create an element declaration with a build-in type</sqf:title>
+                    <sqf:title>Create an element declaration with a build-in type.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="type" default="$types-as-default">
                     <sqf:description>
-                        <sqf:title>Use one of the build-in types</sqf:title>
+                        <sqf:title>Use one of the build-in types.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add match="ancestor::xs:element" position="after">
@@ -482,7 +482,7 @@
             </sqf:fix>
             <sqf:fix id="sl.elementType.complexNew">
                 <sqf:description>
-                    <sqf:title>Create an element declaration with a complex type</sqf:title>
+                    <sqf:title>Create an element declaration with a complex type.</sqf:title>
                 </sqf:description>
                 <sqf:add match="ancestor::xs:element" position="after">
                     <sqf:copy-of select="d2t:defElementDef($ref)"/>
@@ -500,11 +500,11 @@
 
             <sqf:fix id="sl.attribute.add.custom">
                 <sqf:description>
-                    <sqf:title>Add attribute with custom type</sqf:title>
+                    <sqf:title>Add attribute with custom type.</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="sl.attribute.add.custom.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name</sqf:title>
+                        <sqf:title>Specifiy the local name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -527,12 +527,12 @@
                 </sqf:description>
                 <sqf:user-entry name="sl.attribute.add.type" default="$types-as-default">
                     <sqf:description>
-                        <sqf:title>Select the simple type</sqf:title>
+                        <sqf:title>Select the simple type.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:user-entry name="sl.attribute.add.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name</sqf:title>
+                        <sqf:title>Specifiy the local name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -542,11 +542,11 @@
             <sqf:fix id="sl.attribute.add.oxy" use-for-each="$xsd-common-types" use-when="not($es-impl)">
                 <sch:let name="type" value="$sqf:current"/>
                 <sqf:description>
-                    <sqf:title>Add attribute with the type "<sch:value-of select="$type"/>"</sqf:title>
+                    <sqf:title>Add attribute with the type "<sch:value-of select="$type"/>".</sqf:title>
                 </sqf:description>
                 <sqf:user-entry name="sl.attribute.add.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name</sqf:title>
+                        <sqf:title>Specifiy the local name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -555,7 +555,7 @@
             </sqf:fix>
             <sqf:fix id="sl.attribute.no">
                 <sqf:description>
-                    <sqf:title>No more attributes</sqf:title>
+                    <sqf:title>No more attributes.</sqf:title>
                 </sqf:description>
                 <sqf:delete match="d2t:guide-cleanup(., 'check-attributes')"/>
             </sqf:fix>
@@ -574,7 +574,7 @@
 
             <sqf:fix id="sl.check.refAndCt.conversion" use-when="xs:complexType | xs:simpleType and not($existEl)">
                 <sqf:description>
-                    <sqf:title>Convert element declaration to reference</sqf:title>
+                    <sqf:title>Convert element declaration to reference.</sqf:title>
                 </sqf:description>
 
                 <sqf:add match="ancestor::xs:element" position="after">
@@ -606,7 +606,7 @@
 
             <sqf:fix id="vb.check.ref.conversion" use-when="$existEl/@type and not($existEl/xs:complexType)">
                 <sqf:description>
-                    <sqf:title>Convert element reference to type reference</sqf:title>
+                    <sqf:title>Convert element reference to type reference.</sqf:title>
                 </sqf:description>
                 <sqf:add target="type" node-type="attribute" select="concat($existEl/@type, '')"/>
                 <sqf:add target="name" node-type="attribute" select="concat(@ref, '')"/>
@@ -638,7 +638,7 @@
             <sch:assert test="key('element-ref', @name) or $config/@root/tokenize(., '\s') = @name" sqf:fix="sl.check.delete sl.check.asRoot">The type <sch:value-of select="@name"/> is not used for any element.</sch:assert>
             <sqf:fix id="sl.check.delete">
                 <sqf:description>
-                    <sqf:title>Delete the element <sch:value-of select="@name"/></sqf:title>
+                    <sqf:title>Delete the element <sch:value-of select="@name"/>.</sqf:title>
                 </sqf:description>
                 <sqf:delete/>
             </sqf:fix>
@@ -656,7 +656,7 @@
     <sqf:fixes>
         <sqf:fix id="setGuideActive">
             <sqf:description>
-                <sqf:title>Set the XSD guide active</sqf:title>
+                <sqf:title>Set the XSD guide active.</sqf:title>
             </sqf:description>
             <sqf:add match="$config" node-type="attribute" target="status" select="'active'" use-when="$config"/>
             <sqf:add match="/xs:schema" position="first-child" use-when="not($config)">
@@ -669,7 +669,7 @@
         </sqf:fix>
         <sqf:fix id="setGuideInActive">
             <sqf:description>
-                <sqf:title>Deactivate the XSD guide</sqf:title>
+                <sqf:title>Deactivate the XSD guide.</sqf:title>
             </sqf:description>
             <sqf:add match="$config" node-type="attribute" target="status" select="'inactive'" use-when="$config"/>
         </sqf:fix>
