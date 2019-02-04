@@ -12,6 +12,10 @@
         </developer>
     </developers>
     
+    <scm>
+        <url>https://github.com/octavianN/thePowerOfSQF</url>
+    </scm>
+    
     <properties>
         <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
         <project.build.addon>${project.basedir}/build</project.build.addon>
