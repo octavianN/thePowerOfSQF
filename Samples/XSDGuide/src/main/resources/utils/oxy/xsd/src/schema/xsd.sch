@@ -32,14 +32,14 @@
 
     <sch:pattern id="status">
         <sch:rule context="xs:schema">
-            <sch:assert test="$status = 'active'" sqf:fix="setGuideActive" role="info">The XSD guide is inactive.</sch:assert>
+            <sch:assert test="$status = 'active'" sqf:fix="setGuideActive" role="info">The XSD Guide is inactive.</sch:assert>
         </sch:rule>
     </sch:pattern>
 
     <sch:pattern id="mode">
         <sch:rule context="node()[$status = 'inactive']"/>
         <sch:rule context="xs:schema" role="info">
-            <sch:assert test="$design-pattern = ('venetian-blind', 'salami-slice')" sqf:fix="mode.venetian.blind mode.element.based setGuideInActive">Please select the basic XSD design pattern. Possible patterns are: "Venetian Blind" or "Salami Slice".</sch:assert>
+            <sch:assert test="$design-pattern = ('venetian-blind', 'salami-slice')" sqf:fix="mode.venetian.blind mode.element.based setGuideInActive">Please select the basic XSD design pattern.</sch:assert>
             <sqf:fix id="mode.venetian.blind">
                 <sqf:description>
                     <sqf:title>Choose the Venetian Blind pattern.</sqf:title>
@@ -56,6 +56,13 @@
                 </sqf:description>
                 <sqf:add match="$config" target="mode" node-type="attribute" select="'salami-slice'"/>
             </sqf:fix>
+            
+            <sqf:fix id="setGuideInActive">
+                <sqf:description>
+                    <sqf:title>Deactivate the XSD Guide.</sqf:title>
+                </sqf:description>
+                <sqf:add match="$config" node-type="attribute" target="status" select="'inactive'" use-when="$config"/>
+            </sqf:fix>
         </sch:rule>
     </sch:pattern>
 
@@ -70,7 +77,7 @@
                 </sqf:description>
                 <sqf:user-entry name="vb.root.element.name">
                     <sqf:description>
-                        <sqf:title>Please specify the local name of your root element.</sqf:title>
+                        <sqf:title>Please specify the name of your root element.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -84,7 +91,7 @@
                 </sqf:description>
                 <sqf:user-entry name="vb.root.element.name">
                     <sqf:description>
-                        <sqf:title>Please specify the local name of your root element.</sqf:title>
+                        <sqf:title>Please specify the name of your root element.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -238,7 +245,7 @@
                 </sqf:description>
                 <sqf:user-entry name="vb.attribute.add.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name.</sqf:title>
+                        <sqf:title>Specifiy the attribute name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -304,14 +311,14 @@
                 <sqf:description>
                     <sqf:title>Specify an enumeration.</sqf:title>
                 </sqf:description>
-                <sqf:user-entry name="g.simpleType.enum.values">
-                    <sqf:description>
-                        <sqf:title>Specify all values by a comma-separated list.</sqf:title>
-                    </sqf:description>
-                </sqf:user-entry>
                 <sqf:user-entry name="g.simpleType.enum.base" default="$types-as-default">
                     <sqf:description>
                         <sqf:title>Specify the base type.</sqf:title>
+                    </sqf:description>
+                </sqf:user-entry>
+                <sqf:user-entry name="g.simpleType.enum.values">
+                    <sqf:description>
+                        <sqf:title>Specify all values by a comma-separated list.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -499,7 +506,7 @@
                 </sqf:description>
                 <sqf:user-entry name="sl.attribute.add.custom.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name.</sqf:title>
+                        <sqf:title>Specifiy the attribute name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -527,7 +534,7 @@
                 </sqf:user-entry>
                 <sqf:user-entry name="sl.attribute.add.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name.</sqf:title>
+                        <sqf:title>Specifiy the attribute name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -541,7 +548,7 @@
                 </sqf:description>
                 <sqf:user-entry name="sl.attribute.add.name">
                     <sqf:description>
-                        <sqf:title>Specifiy the local name.</sqf:title>
+                        <sqf:title>Specifiy the attribute name.</sqf:title>
                     </sqf:description>
                 </sqf:user-entry>
                 <sqf:add position="last-child">
@@ -651,7 +658,7 @@
     <sqf:fixes>
         <sqf:fix id="setGuideActive">
             <sqf:description>
-                <sqf:title>Set the XSD guide active.</sqf:title>
+                <sqf:title>Activate the XSD Guide.</sqf:title>
             </sqf:description>
             <sqf:add match="$config" node-type="attribute" target="status" select="'active'" use-when="$config"/>
             <sqf:add match="/xs:schema" position="first-child" use-when="not($config)">
@@ -661,12 +668,6 @@
                     </xs:appinfo>
                 </xs:annotation>
             </sqf:add>
-        </sqf:fix>
-        <sqf:fix id="setGuideInActive">
-            <sqf:description>
-                <sqf:title>Deactivate the XSD guide.</sqf:title>
-            </sqf:description>
-            <sqf:add match="$config" node-type="attribute" target="status" select="'inactive'" use-when="$config"/>
         </sqf:fix>
 
     </sqf:fixes>
