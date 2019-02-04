@@ -1,0 +1,140 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.data2type</groupId>
+    <artifactId>styleguide-demo</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>d2t XSLT Styleguide framework (demo version)</name>
+    
+    <developers>
+        <developer>
+            <name>Nico Kutscherauer</name>
+            <email>kutscherauer@data2type.de</email>
+        </developer>
+    </developers>
+    
+    <properties>
+        <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
+        <project.build.addon>${project.basedir}/build</project.build.addon>
+        <buildNumber>${maven.build.timestamp}</buildNumber>
+    </properties>
+    
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <executions>
+                    <execution>
+                        <id>make-addon</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptor>src/main/assembly/assembly-addon.xml</descriptor>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>make-src</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptor>src/main/assembly/assembly-src.xml</descriptor>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>            
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id><!-- here the phase you need--> 
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.addon}/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/non-packaged-resources</directory>
+                                    <include>extension.xml</include>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <!-- skip when version is SNAPSHOT -->
+                            <skip>${project.version.is.snapshot}</skip>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-addon</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.addon}/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <include>${project.artifactId}-${project.version}-addon.zip</include>
+                                    <include>${project.artifactId}-${project.version}-src.zip</include>
+                                </resource>
+                            </resources>
+                            <!-- skip when version is SNAPSHOT -->
+                            <skip>${project.version.is.snapshot}</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.12</version>
+                <executions>
+                    <execution>
+                        <id>timestamp-property</id>
+                        <goals>
+                            <goal>timestamp-property</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <name>current.year</name>
+                            <pattern>yyyy</pattern>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- sets the project.version.is.snapshot property to true if SNAPSHOT was used, 
+                to the project version otherwise -->
+                        <id>build-helper-regex-is-snapshot-used</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>regex-property</goal>
+                        </goals>
+                        <configuration>
+                            <name>project.version.is.snapshot</name>
+                            <value>${project.version}</value>
+                            <regex>.*-SNAPSHOT</regex>
+                            <replacement>true</replacement>
+                            <failIfNoMatch>false</failIfNoMatch>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+    </build>
+</project>
