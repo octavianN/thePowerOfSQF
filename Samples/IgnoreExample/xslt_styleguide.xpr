@@ -8,15 +8,8 @@
                     <entry>
                         <String>additional.frameworks.directories</String>
                         <String-array>
-                            <String>D:\nico\Work\Produktion\_oxygen_frameworks</String>
-                            <String>D:\nico\Work\Java2\escali-main-package\escali\src\test\resources\sch\gui-tests\test7-pagina-dtd-validation</String>
-                            <String>D:\nico\Work\Java2\escali-main-package\escali\src\test\resources\sch\gui-tests\test9-pagina-parsx</String>
                             <String>${pd}/src/main/resources/utils/oxy/</String>
                         </String-array>
-                    </entry>
-                    <entry>
-                        <String>frameworks.directory.url.with.editor.variables</String>
-                        <String>file:/D:/nico/Work/Produktion/_oxygen_frameworks</String>
                     </entry>
                     <entry>
                         <String>key.editor.document.type.custom.locations.option.pane</String>
