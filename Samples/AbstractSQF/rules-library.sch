@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sch:schema xmlns:sch="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2"
     xmlns:sqf="http://www.schematron-quickfix.com/validator/process">
-    <sch:include href="../quickFix-library.xml"/>
+    <sch:include href="quickFix-library.xml"/>
     
     <sch:pattern id="unwrapCheckPattern" abstract="true">
         <sch:rule context="$childElement">
