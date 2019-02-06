@@ -5,6 +5,17 @@
     <version>1.0.0-SNAPSHOT</version>
     <name>XSD Guide</name>
     
+    <developers>
+        <developer>
+            <name>Nico Kutscherauer</name>
+            <email>kutscherauer@data2type.de</email>
+        </developer>
+    </developers>
+    
+    <scm>
+        <url>https://github.com/octavianN/thePowerOfSQF</url>
+    </scm>
+    
     <properties>
         <maven.build.timestamp.format>yyyyMMdd</maven.build.timestamp.format>
         <project.build.addon>${project.basedir}/build</project.build.addon>
