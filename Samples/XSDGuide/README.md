@@ -15,14 +15,15 @@ The XSD Guide is tested with
 
 1. Please make sure Oxygen XML Editor is installed.
 1. Use the addon function of Oxygen (Help > Install new add-ons...)
-1. Use the following URL as "update site": [https://raw.githubusercontent.com/octavianN/thePowerOfSQF/Samples/xsdguide/build/extensions.xml](https://raw.githubusercontent.com/octavianN/thePowerOfSQF/Samples/xsdguide/build/extensions.xml)
+1. Use the following URL as "update site": [https://raw.githubusercontent.com/octavianN/thePowerOfSQF/master/Samples/XSDGuide/build/extensions.xml](https://raw.githubusercontent.com/octavianN/thePowerOfSQF/master/Samples/XSDGuide/build/extensions.xml)
 1. Istall the XSD Guide framework and follow the installation guide.
 
 ### Escali Oxygen Plugin
 
 1. Please make sure Oxygen XML Editor is installed.
 1. Install the Esali Oxygen Plugin (described [here](https://github.com/schematron-quickfix/escali-package/tree/master/escaliOxygen))
-1. Download the source files: [https://raw.githubusercontent.com/octavianN/thePowerOfSQF/Samples/xsdguide/build/xsdguide-1.0.0-src.zip](https://raw.githubusercontent.com/octavianN/thePowerOfSQF/Samples/xsdguide/build/xsdguide-1.0.0-src.zip)
+1. Download the source files:
+[https://github.com/octavianN/thePowerOfSQF/blob/master/Samples/XSDGuide/build/xsdguide-1.0.0-addon.zip](https://github.com/octavianN/thePowerOfSQF/blob/master/Samples/XSDGuide/build/xsdguide-1.0.0-addon.zip)
 1. Extract the zip into any folder (XSD Guide install dir).
 1. Go to Oxygen > Window > View > Escali Schematron > Options (gear symbol, in the top right corner).
 1. Activate the option "Detect schema by the following rule table"
